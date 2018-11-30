@@ -13,6 +13,7 @@ const routes: Routes = [
 	{ path: 'todo', component: TodoComponent },
 	{ path: 'contact', component: ContactComponent },
 	{ path: 'heroes', component: HeroesComponent },
+	{ path: 'heroes/:power', component: HeroesComponent },
 	{ path: 'hero/:id', component: HeroDetailComponent }
 ];
 

@@ -12,7 +12,7 @@ export class HeroService {
 	constructor() { }
 
 	getHeroes(filter: string): HeroInterface[] {
-		if (filter === 'all')
+		if (!filter)
 		{
 			return HEROES;
 		}
@@ -26,6 +26,16 @@ export class HeroService {
 			{
 				return hero;
 			}
+
+
+			if(hero.powers.includes(filter))
+			{
+				return hero;
+			}
 		});
+	}
+
+	getIndividualHero(params: object): HeroInterface {
+		return HEROES.find( hero => hero.id === +params['id']);
 	}
 }
