@@ -46,20 +46,17 @@ export class HeroService {
 	}
 
 	getIndividualHero(params: object): HeroInterface  {
-		const id = +params['id'];
-		const test = HEROES.find( hero => {
-			return hero.id === id;
-		});
-
-		if(!test)
+		const id: number = +params['id'];
+		const selectedHero: HeroInterface = HEROES.find( hero => hero.id === id );
+		
+		if(!selectedHero)
 		{
-			console.log("no hero");
-			this.heroNotFound(`${id}`);
+			this.heroNotFound(id);
 		}
-		return test;
+		return selectedHero
 	}
 
-	heroNotFound(noHero: string){
+	heroNotFound(noHero: number | string){
 		return this.router.navigateByUrl(`/hero-not-found/${noHero}`);
 	}
 }
