@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 import { HEROES } from '../mocks/mock-heroes';
@@ -9,33 +10,56 @@ import { HeroInterface } from '../interfaces/hero-interface';
 })
 export class HeroService {
 
-	constructor() { }
+	constructor(private router: Router) { }
 
-	getHeroes(filter: string): HeroInterface[] {
-		if (!filter)
+	getHeroes(filter: string, powerFilter?: string): HeroInterface[] {
+		if (!filter && !powerFilter)
 		{
 			return HEROES;
 		}
 
 		return HEROES.filter(hero =>{
+			if(!filter && powerFilter)
+			{
+				return hero.powers.includes(powerFilter);
+			}
+
 			if(filter === 'hero' && hero.hero)
 			{
-				return hero;
-			}
-			else if(filter === 'villain' && !hero.hero)
-			{
-				return hero;
+				return this.filterHeroes(powerFilter, hero);
 			}
 
-
-			if(hero.powers.includes(filter))
+			if(filter === 'villain' && !hero.hero)
 			{
-				return hero;
+				return this.filterHeroes(powerFilter, hero);
 			}
 		});
 	}
 
-	getIndividualHero(params: object): HeroInterface {
-		return HEROES.find( hero => hero.id === +params['id']);
+	filterHeroes(powerFilter: string, hero: HeroInterface): HeroInterface | boolean {
+		if(powerFilter)
+		{
+			return hero.powers.includes(powerFilter);
+		}
+
+		return hero;
+	}
+
+	getIndividualHero(params: object): HeroInterface  {
+		const id = +params['id'];
+		const test = HEROES.find( hero => {
+			return hero.id === id;
+		});
+
+		if(!test)
+		{
+			console.log("no hero");
+			this.heroNotFound(`${id}`);
+		}
+		return test;
+	}
+
+	heroNotFound(noHero: string){
+		return this.router.navigateByUrl(`/hero-not-found/${noHero}`);
 	}
 }
