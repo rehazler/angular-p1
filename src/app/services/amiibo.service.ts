@@ -13,6 +13,6 @@ export class AmiiboService {
   constructor(private api: ApiService) { }
 
   getAmiibos() {
-  	return this.api.get<AmiiboInterface[]>('/amiibo');
+  	return this.api.get('/amiibo');
   }
 }
